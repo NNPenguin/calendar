@@ -23,6 +23,9 @@ h1{
 #reset{
     background-color: #ffa2a2;
 }
+.button:hover{
+    opacity: 0.5;
+}
 
 /*テーブルデザイン*/
 #table2{
