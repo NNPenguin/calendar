@@ -1,0 +1,38 @@
+@charset "UTF-8";
+html,body,div,table,tr,td,h1,p{
+    margin: 0 auto;
+}
+h1,p,table{
+    margin-top: 20px;
+}
+h1,p,th,td{
+    text-align: center;
+}
+h1{
+    font-size: 30px;
+}
+/*ボタンデザイン*/
+[type="button"]{
+    border: solid 1px;
+    background-color: #fcfc7c;
+    font-size: 16px;
+}
+#hyouji{
+    background-color: #92adfe;
+}
+#reset{
+    background-color: #ffa2a2;
+}
+
+/*テーブルデザイン*/
+#table2{
+    border-collapse: collapse;
+}
+#table2 th,#table2 td{
+    width: 50px;
+    height: 35px;
+    border: solid 1px black;
+}
+#table2 th{
+    background-color: #92adfe;
+}

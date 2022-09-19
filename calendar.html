@@ -1,0 +1,236 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>万年カレンダー</title>
+        <link rel="stylesheet" href="calendar.css">
+    </head>
+    <body>
+        <div id="wrapper">
+        <h1>万年カレンダー</h1>
+        <p>1582年10月(グレゴリオ歴)以降のカレンダーを表示します。<br>
+           西暦、月を半角数字で入力し、『表示』ボタンをクリックするとカレンダーが表示されます。</p>
+        <table id="table1">
+            <tr>
+                <td colspan="2"><input type="text" id="year" size="12"><label for="year">年</label></td>
+                <td colspan="2"><input type="text" id="month" size="12"><label for="month">月</label></td>
+            <tr>
+                <td colspan="2"><input type="button" id="hyouji" value="表示"></td>
+                <td colspan="2"><input type="button" id="reset" value="リセット"></td>
+            </tr>
+            <tr>
+            </tr>
+                <td><input type="button" id="sakunen" value="昨年"></td>
+                <td><input type="button" id="sengetu" value="先月"></td>
+                <td><input type="button" id="raigetu" value="来月"></td>
+                <td><input type="button" id="rainen" value="来年"></td>
+                  
+            </tr>
+        </table>
+        <table id="table2"></table>
+
+        <script>
+/*
+万年カレンダー
+● 1日の曜日の算出
+・基準日とする曜日の取得（事前に基準日を決めて取得しておく）
+・基準日からの経過日数を計算
+・経過日数から、基準からの曜日のずれがわかるので、それにより1日の曜日を求める
+● 閏年のルール
+・400で割り切れるとしは閏年
+・1以外で4で割り切れる、かつ100で割り切れない年は閏年
+*/
+        const sengetu=document.getElementById("sengetu");
+        const raigetu=document.getElementById("raigetu");
+        const sakunen=document.getElementById("sakunen");
+        const rainen=document.getElementById("rainen");
+        const year=document.getElementById("year");
+        const month=document.getElementById("month");
+        const reset=document.getElementById("reset");
+        const table=document.getElementById("table2");
+
+        let uruArray=[0,31,29,31,30,31,30,31,31,30,31,30,31];
+        let uruArraySum=[0,0,31,60,91,121,152,182,213,244,274,305,335];
+        let mArray=[0,31,28,31,30,31,30,31,31,30,31,30,31];
+        let mArraySum=[0,0,31,59,90,120,151,181,212,243,273,304,334];
+        let str=table.innerHTML;
+        let nYear,y,m,uru,day;
+
+//表示ボタン押下
+        hyouji.addEventListener("click",function(e){
+            //入力した年
+            nYear=year.value;
+            y=nYear-1;
+            //入力した月
+            m=month.value;
+            //今まで閏年が何回あったか
+            uru=Math.floor(y/400)+Math.floor(y/4)-Math.floor(y/100);
+
+//366日(閏年)
+        function keisan(){
+            if((nYear%400==0 || (nYear%4==0 && nYear%100!=0)) && (nYear.match(/^[0-9]+$/) && m.match(/^[0-9]+$/) && m>=1 && m<=12)){
+                str="<tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr>";
+                day=(y*365+uru+uruArraySum[m])%7;
+                day=-day;
+                if(day==-6){
+                    day=1;
+                    while(1){
+                    str+="<tr>";
+                        for(let i=0;i<7;i++){
+                                str+="<td>"+day+"</td>";
+                                day++;
+                            }     
+                    str+="</tr>";
+                        if(day>uruArray[m]){
+                            break;
+                        }
+                    }
+                }else{
+                    while(1){
+                    str+="<tr>";
+                        for(let i=0;i<7;i++){
+                            if(day<1 || day>uruArray[m]){
+                                str+="<td>&nbsp;</td>";
+                            }else{
+                                str+="<td>"+day+"</td>";
+                            }
+                            day++;
+                        }
+                    str+="</tr>";
+                        if(day>uruArray[m]){
+                            break;
+                        }
+                    }
+                }
+//365日(平年)
+            }else if(nYear.match(/^[0-9]+$/) && m.match(/^[0-9]+$/) && m>=1 && m<=12){
+                str="<tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr>";
+                day=(y*365+uru+mArraySum[m])%7;
+                day=-day;
+                if(day==-6){
+                    day=1;
+                    while(1){
+                    str+="<tr>";
+                        for(let i=0;i<7;i++){
+                                str+="<td>"+day+"</td>";
+                                day++;
+                            }     
+                    str+="</tr>";
+                        if(day>mArray[m]){
+                            break;
+                        }
+                    }
+                }else{
+                    while(1){
+                    str+="<tr>";
+                        for(let i=0;i<7;i++){
+                            if(day<1 || day>mArray[m]){
+                                str+="<td>&nbsp;</td>";
+                            }else{
+                                str+="<td>"+day+"</td>";
+                            }
+                            day++;
+                        }
+                    str+="</tr>";
+                        if(day>mArray[m]){
+                            break;
+                        }
+                    }
+                }
+                
+            }else{
+                month.value="";
+                year.value="";
+                alert("正しい数値を入力してください。");
+            }
+            table.innerHTML=str;
+        }
+        keisan();
+
+//来月ボタン押下
+        raigetu.addEventListener("click",function(){
+            if(month.value>=1 && month.value<=11){
+                month.value++;
+            }else if(month.value==12){
+                year.value++;
+                month.value=1;
+            }else{
+                alert("来月　数値が違います。");
+            }
+            nYear=year.value;
+            y=nYear-1;
+            m=month.value;
+            uru=Math.floor(y/400)+Math.floor(y/4)-Math.floor(y/100);
+            day=(y*365+uru)%7;
+            day=-day;
+            keisan();
+            event.stopImmediatePropagation();
+        },false);
+
+//先月ボタン押下
+        sengetu.addEventListener("click",function(){
+            if(month.value>=2 && month.value<=12){
+                month.value--;
+            }else if(month.value==1){
+                year.value--;
+                month.value=12;
+            }else{
+                alert("先月　数値が違います");
+            }
+            nYear=year.value;
+            y=nYear-1;
+            m=month.value;
+            uru=Math.floor(y/400)+Math.floor(y/4)-Math.floor(y/100);
+            day=(y*365+uru)%7;
+            day=-day;
+            keisan();
+            event.stopImmediatePropagation();
+        },false);
+
+//来年ボタン押下
+        rainen.addEventListener("click",function(){
+            if(year.value>=1){
+                year.value++;
+            }else{
+                alert("来年　数値が違います");
+            }
+            nYear=year.value;
+            y=nYear-1;
+            m=month.value;
+            uru=Math.floor(y/400)+Math.floor(y/4)-Math.floor(y/100);
+            day=(y*365+uru)%7;
+            day=-day;
+            keisan();
+            event.stopImmediatePropagation();
+        },false);
+        
+//昨年ボタン押下
+        sakunen.addEventListener("click",function(){
+            if(year.value>1){
+                year.value--;
+            }else{
+                alert("昨年　数値が違います");
+            }
+            nYear=year.value;
+            y=nYear-1;
+            m=month.value;
+            uru=Math.floor(y/400)+Math.floor(y/4)-Math.floor(y/100);
+            day=(y*365+uru)%7;
+            day=-day;
+            keisan();
+            event.stopImmediatePropagation();
+        },false);
+
+//リセットボタン押下
+        reset.addEventListener("click",function(){
+            month.value="";
+            year.value="";
+            str="";
+            table.innerHTML=str;
+        },false);
+    },false);
+
+        </script>
+        </div>
+    </body>
+</html>
