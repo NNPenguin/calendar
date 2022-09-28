@@ -73,13 +73,18 @@
                 day=(y*365+uru+uruArraySum[m])%7;
                 day=-day;
                 if(day==-6){
+                    console.log (day);
                     day=1;
                     while(1){
                     str+="<tr>";
                         for(let i=0;i<7;i++){
+                            if(day>=1 && day<=uruArray[m]){
                                 str+="<td>"+day+"</td>";
-                                day++;
-                            }     
+                            }else{
+                                str+="<td>&nbsp;</td>";
+                            }
+                            day++;
+                        }
                     str+="</tr>";
                         if(day>uruArray[m]){
                             break;
@@ -108,13 +113,18 @@
                 day=(y*365+uru+mArraySum[m])%7;
                 day=-day;
                 if(day==-6){
+                    console.log (day);
                     day=1;
                     while(1){
                     str+="<tr>";
                         for(let i=0;i<7;i++){
+                            if(day>=1 && day<=mArray[m]){
                                 str+="<td>"+day+"</td>";
-                                day++;
-                            }     
+                            }else{
+                                str+="<td>&nbsp;</td>";
+                            }
+                            day++;
+                        }     
                     str+="</tr>";
                         if(day>mArray[m]){
                             break;
