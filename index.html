@@ -30,16 +30,6 @@
         <table id="table2"></table>
 
         <script>
-/*
-万年カレンダー
-● 1日の曜日の算出
-・基準日とする曜日の取得（事前に基準日を決めて取得しておく）
-・基準日からの経過日数を計算
-・経過日数から、基準からの曜日のずれがわかるので、それにより1日の曜日を求める
-● 閏年のルール
-・400で割り切れるとしは閏年
-・1以外で4で割り切れる、かつ100で割り切れない年は閏年
-*/
         const sengetu=document.getElementById("sengetu");
         const raigetu=document.getElementById("raigetu");
         const sakunen=document.getElementById("sakunen");
@@ -73,7 +63,6 @@
                 day=(y*365+uru+uruArraySum[m])%7;
                 day=-day;
                 if(day==-6){
-                    console.log (day);
                     day=1;
                     while(1){
                     str+="<tr>";
@@ -113,7 +102,6 @@
                 day=(y*365+uru+mArraySum[m])%7;
                 day=-day;
                 if(day==-6){
-                    console.log (day);
                     day=1;
                     while(1){
                     str+="<tr>";
